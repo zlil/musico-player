@@ -19,23 +19,23 @@
 
 ## Functionality
 
-  Click on play all:
-    *	Play all button become stop
-    *	Tracks start playing
-    *	Track play icon become PAUSE
-    *	Tracks loop (i.e. starts again when they have finished playing)
- 	Click on single track play:
-    *	Rest of tracks are not effected
-    *	Play all stays play all
-    *	The selected single tracks play button becomes pause
-    *	Track plays - Doesn’t loop
- 	Clicking on sync:
-    *	Calculate the leader track bpm  (leader is the longest track)
-    *	Sync all tracks to the leader track
-    *	Reorder the tracks according to the track length
-    *	Change BPM to new BPM
-    *	Show original BPM (on click on original bpm change the bpm to the original bpm)
-    *	Play all
+Click on play all:
+*	Play all button become stop
+*	Tracks start playing
+*	Track play icon become PAUSE
+*	Tracks loop (i.e. starts again when they have finished playing)
+Click on single track play:
+*	Rest of tracks are not effected
+*	Play all stays play all
+*	The selected single tracks play button becomes pause
+*	Track plays - Doesn’t loop
+Clicking on sync:
+*	Calculate the leader track bpm  (leader is the longest track)
+*	Sync all tracks to the leader track
+*	Reorder the tracks according to the track length
+*	Change BPM to new BPM
+*	Show original BPM (on click on original bpm change the bpm to the original bpm)
+*	Play all
 
 ## Todos
    * Testing

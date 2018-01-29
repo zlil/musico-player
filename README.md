@@ -11,7 +11,7 @@
 ## Explanation
 
 *	Support play/pause
-*	Support play all / Stop all
+*	Support Play all / Stop all
 *	Support remove a single track from the looper
 *	Support add track from list (dropdown list)
 *	If play all is selected, tracks must loop. Otherwise it should run only once
@@ -30,11 +30,13 @@ Click on play all:
 *	Tracks start playing
 *	Track play icon become PAUSE
 *	Tracks loop (i.e. starts again when they have finished playing)
+
 Click on single track play:
 *	Rest of tracks are not effected
 *	Play all stays play all
 *	The selected single tracks play button becomes pause
 *	Track plays - Doesn’t loop
+
 Clicking on sync:
 *	Calculate the leader track bpm  (leader is the longest track)
 *	Sync all tracks to the leader track

@@ -38,8 +38,8 @@
     *	Play all
 
 ## Todos
-  ● Testing
-  ● Circular progress bar over the play icon
+   * Testing
+   * Circular progress bar over the play icon
 
 ## Build Setup
 

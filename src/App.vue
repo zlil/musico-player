@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <i class="material-icons center-align musicLogo">music_note</i>
     <router-view></router-view>
   </div>
@@ -14,7 +14,7 @@
 </script>
 
 <style>
-  #app {
+  body {
     margin-top: 0px !important;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

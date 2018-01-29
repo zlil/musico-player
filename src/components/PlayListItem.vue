@@ -55,8 +55,6 @@
       return {
         audioClasses: 'player player'+this.$props.trackId,
         playing: false,
-        playerRolling: false,
-        playAllRequest: false,
         duration: null,
         volume: 20,
         bits: 0,
@@ -79,7 +77,6 @@
           realTime: false,
           lazy: false
         },
-        syncedMode: false,
         currentTime: 0
       }
     },
@@ -111,23 +108,16 @@
     methods: {
       /* play or pause the track with loops or not, with loops condition called from parent */
       playOrPause(loopOrNot) {
-
         this.playing = !this.playing
         this.play(this.playing, loopOrNot);
       },
-      playtest(offset) {
-        //this.playing = !this.playing
-        this.$refs.player.currentTime = offset
-        //console.log(this.$refs.player)
-        //this.$refs.player.play();
 
-      },
       /* play or pause, set loop if required */
       play(playOrPause, loopOrNot = false) {
         if (playOrPause)
-          this.$refs.player.play();
+          document.getElementsByClassName('player'+this.$props.trackId)[0].play();
         else
-          this.$refs.player.pause();
+          document.getElementsByClassName('player'+this.$props.trackId)[0].pause();
 
         this.loopOrNot = loopOrNot
         this.$refs.player.loop = loopOrNot;
@@ -165,7 +155,7 @@
         let playerAudioTag = document.getElementsByClassName('player'+this.$props.trackId)[0]
         //change the play icon
         this.playing = !this.playing
-        //weird bug cannot use the $refs so caught it with getElementsByClassName
+
         playerAudioTag.play()
       }
     },
@@ -174,9 +164,6 @@
 
       /* if play after another required, currently disabled feature */
       this.$el.children[0].onended = function (e) {
-        //currently disabled - not necessary
-        //this.playAllRequest ? self.$emit('playNextTrack') : ''
-
         //set the play button back to normal
         if (!self.loopOrNot)
           self.playing = !self.playing;

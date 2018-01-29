@@ -26,9 +26,9 @@
 ## Functionality
 
 Click on play all:
-*	The play all button should be changed to stop button
+*	The play all button ought to change to stop button
 *	Tracks start playing
-*	The play button should be changed to pause button
+*	The play button ought to change to pause button
 *	Tracks loop (i.e. starts again when they have finished playing)
 
 Click on single track play:

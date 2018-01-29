@@ -1,5 +1,3 @@
-<img align="center" width="120" height="178"
-     title="Vue logo" src="./src/assets/logo.png">
 
 # musico
 
@@ -7,7 +5,7 @@
 
 <p align="center">
   <img src="./src/assets/ScreenShot.png" alt="Musico example"
-       width="650" height="650">
+       width="550" height="550">
 </p>
 
 ## Explanation

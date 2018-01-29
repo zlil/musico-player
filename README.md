@@ -1,12 +1,13 @@
-# musico
-<img align="right" width="120" height="178"
+<img align="center" width="120" height="178"
      title="Vue logo" src="./src/assets/logo.png">
+
+# musico
 
 > Musico Player - A Vue.js project
 
 <p align="center">
   <img src="./src/assets/ScreenShot.png" alt="Musico example"
-       width="650" height="335">
+       width="650" height="650">
 </p>
 
 ## Explanation

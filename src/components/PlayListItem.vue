@@ -1,6 +1,6 @@
 <template>
   <div class="playItem">
-    <audio class="player" ref="player">
+    <audio :class="[audioClasses]" ref="player" >
       <source :src="trackSrc" type="audio/wav">
     </audio>
     <div class="row mainRow">
@@ -53,11 +53,11 @@
     props: ['trackId', 'trackName', 'artist', 'trackSrc', 'bpm', 'leaderBpm'],
     data() {
       return {
+        audioClasses: 'player player'+this.$props.trackId,
         playing: false,
         playerRolling: false,
         playAllRequest: false,
         duration: null,
-        player: this.$refs.player,
         volume: 20,
         bits: 0,
         showLeaderBpm: true,
@@ -78,7 +78,9 @@
           clickable: true,
           realTime: false,
           lazy: false
-        }
+        },
+        syncedMode: false,
+        currentTime: 0
       }
     },
     computed: {
@@ -109,10 +111,17 @@
     methods: {
       /* play or pause the track with loops or not, with loops condition called from parent */
       playOrPause(loopOrNot) {
+
         this.playing = !this.playing
         this.play(this.playing, loopOrNot);
       },
+      playtest(offset) {
+        //this.playing = !this.playing
+        this.$refs.player.currentTime = offset
+        //console.log(this.$refs.player)
+        //this.$refs.player.play();
 
+      },
       /* play or pause, set loop if required */
       play(playOrPause, loopOrNot = false) {
         if (playOrPause)
@@ -142,6 +151,22 @@
       /* set start position */
       setStartPosition() {
         this.$refs.player.currentTime = 0;
+        this.currentTime = 0
+      },
+
+      /* set progress */
+      setProgress(progress, keepState = false) {
+        if(progress === 0)
+          this.setStartPosition()
+
+        let progressDuration = progress  * this.duration
+        console.log('track '+this.$props.trackId + ' current time is now: '+ progressDuration)
+        this.$refs.player.currentTime = progressDuration
+        let playerAudioTag = document.getElementsByClassName('player'+this.$props.trackId)[0]
+        //change the play icon
+        this.playing = !this.playing
+        //weird bug cannot use the $refs so caught it with getElementsByClassName
+        playerAudioTag.play()
       }
     },
     mounted() {
@@ -190,16 +215,13 @@
     background: #4a473c;
     color: orange;
     margin: 0px;
+    border: 1px solid #3C250E;
   }
 
   .volumeBarContainer {
     margin-top: 0px;
     display: flex;
     justify-content: right;
-  }
-
-  .volumeBar {
-    margin: 0px;
   }
 
   .playButtonContainer {
@@ -212,30 +234,15 @@
     margin: 5px 0px;
   }
 
-  /*.trackContent {*/
-  /*padding-top: 22px;*/
-  /*}*/
-
   .firstSettings {
     margin-bottom: 0px;
   }
 
-  /*.addons {*/
-  /*border: 1px solid blue;*/
-  /*}*/
 
   .noMarginTop {
     margin-top: 0px;
     margin-bottom: 0px;
   }
-
-  /*.barsAndTrash {*/
-  /*margin-top: 4px;*/
-  /*}*/
-
-  /*.barsAndTrash {*/
-  /*padding-top: 22px;*/
-  /*}*/
 
   .trackDetails {
     margin-top: 10px;

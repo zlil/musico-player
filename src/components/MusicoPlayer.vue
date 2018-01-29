@@ -11,20 +11,26 @@
       <div class="row">
         <select class="tracksSelection" v-model="trackToAdd" v-on:change="addTrack()">
           <option value="" disabled selected="true">Tap To Choose...</option>
-          <option v-for="(item, key) in tracks" v-bind:value="[tracks[key]]" :key="key" @click="addTrack(item)">
+          <option v-for="(item, key) in tracks" v-bind:value="[tracks[key]]" :key="key" @click.native="addTrack(item)">
             {{item.owner}} - {{item.url | generateTrackName }}
           </option>
         </select>
       </div>
       <div class="row">
         <ul id="playList" class="z-depth-5">
-          <li v-for="item in tracks" :key="item.id">
-            <PlayItem v-if="item.show" :trackId="item.Id" :trackSrc="item.url" :artist="item.owner" :bpm="item.bpm" :leaderBpm="item.leaderBpm"
-                      ref="track"
-                      @playNextTrack="goNext()" @getDuration="getDuration(item.Id)" :key="item.Id"
-                      @removeFromList="removeFromList(item.Id)"></PlayItem>
-            <hr v-if="item.show" class="hr">
-          </li>
+          <transition-group
+            name="loginAnimation"
+            enter-active-class="animated zoomIn"
+            leave-active-class="animated zoomOut zoomOutPushToTop"
+            mode="out-in"
+          >
+            <li v-for="(item, key) in tracks" :key="key" v-show="item.show">
+              <PlayItem :trackId="item.Id" :trackSrc="item.url" :artist="item.owner" :bpm="item.bpm" :leaderBpm="item.leaderBpm"
+                        ref="track"
+                        @playNextTrack="goNext()" @getDuration="getDuration(item.Id)"
+                        @removeFromList="removeFromList(item.Id)"></PlayItem>
+            </li>
+          </transition-group>
         </ul>
       </div>
     </div>
@@ -39,59 +45,67 @@
 
     data() {
       return {
-        tracks: [{
+        tracks:
+          [{
           "Id": 1,
           "url": "https://s3.amazonaws.com/candidate-task/Track+1.mp3",
           "owner": "Ori Winokur",
           "bpm": 120,
-          "show": true
+          "show": true,
+          "duration": null
         }, {
           "Id": 2,
           "url": "https://s3.amazonaws.com/candidate-task/Track+2.mp3",
           "owner": "Yonatan Pistiner",
           "bpm": 100,
-          "show": true
+          "show": true,
+          "duration": null
         }, {
           "Id": 3,
           "url": "https://s3.amazonaws.com/candidate-task/Track+3.mp3",
           "owner": "Barak Inbar",
           "bpm": 123,
-          "show": true
+          "show": true,
+          "duration": null
         }, {
           "Id": 4,
           "url": "https://s3.amazonaws.com/candidate-task/Track+4.mp3",
           "owner": "Ori Winokur",
           "bpm": 80,
-          "show": true
+          "show": true,
+          "duration": null
         }, {
           "Id": 5,
           "url": "https://s3.amazonaws.com/candidate-task/Track+5",
           "owner": "Yonatan Pistiner",
           "bpm": 80,
-          "show": true
+          "show": true,
+          "duration": null
         }, {
           "Id": 6,
           "url": "https://s3.amazonaws.com/candidate-task/Track+6",
           "owner": "Barak Inbar",
           "bpm": 90,
-          "show": true
+          "show": true,
+          "duration": null
         }],
-        syncedTracks: null,
         currentPlaying: null,
         playingAll: false,
         trackToAdd: '',
+        leaderProgress: null,
       }
     },
     methods: {
       /* play all track with loops */
-      playAll() {
+      playAll(sync=false) {
         this.playingAll = !this.playingAll
-
         for (let track of this.$refs.track) {
-          track.playOrPause(true)
-          //stop all reset
-          if(!this.playingAll)
+          //reset progress
+          if(!sync)
             track.setStartPosition();
+
+          //play & send loop flag
+          track.playOrPause(true)
         }
       },
       removeFromList(trackId) {
@@ -121,12 +135,47 @@
           this.$refs.track[this.currentPlaying - 1].playOrPause();
         }
       },
-      playSync () {
-        this.sortedTracks()
-        this.changeBpm()
+      async playSync () {
+        this.$refs.track.forEach((song) => {
+
+          if(song.playing){
+            song.playOrPause()
+          }
+        })
+        let songs = this.sortedTracks();
+        //this.changeBpm();
+        this.playingAll = !this.playingAll
+        $(document).ready(() => {
+
+          let leader = songs[0];
+          var leaderProgress = this.getProgress(leader.Id, leader.duration)
+
+          this.$refs.track.forEach(song => {
+            let keepState = false
+            if(song.trackId == leader.Id)
+               keepState = true
+
+            song.setProgress(leaderProgress, keepState)
+            keepState = false
+
+          })
+          //this.playAll(true)
+
+        })
       },
+//      playSync () {
+//        this.sortedTracks()
+//        this.changeBpm()
+//        this.syncedTracks = true
+//        for (let track of this.$refs.track) {
+//          track.setProgress(this.leaderProgress)
+//          track.setSyncedMode(true)
+//        }
+//        //this.playAll(true)
+//      },
       changeBpm () {
         let leader = this.tracks[0];
+        this.leaderProgress = this.getProgress(leader.Id, leader.duration)
         this.tracks = this.tracks.map((track) => {
           if(track !== leader) {
             track.leaderBpm = leader.bpm
@@ -136,7 +185,7 @@
       },
       /* sort the tracks by duration length */
       sortedTracks() {
-        this.tracks.sort((s1, s2) => {
+        return this.tracks.sort((s1, s2) => {
           return s1.duration - s2.duration
         }).reverse()
       },
@@ -158,6 +207,20 @@
           return track
         });
       },
+      /* get leader's progress */
+      getProgress(id, duration) {
+        let self = this;
+        let leader = document.getElementsByClassName('player'+id)[0];
+        let currentTime = leader.currentTime
+        if(currentTime == 0)
+          return 0
+
+
+        console.log('leader current time '+ currentTime)
+        console.log('leader duration '+ duration)
+        console.log(`leader progress by %: ${Math.fround(currentTime / duration)}`)
+        return Math.fround(currentTime / duration)
+      },
       addTrack () {
         let track = this.getTrackToAdd;
         track.Id = this.tracks.length + 1;
@@ -173,11 +236,15 @@
       /* copy object and add track */
       getTrackToAdd() {
         return {...this.trackToAdd[0]}
+      },
+
+      getRefs() {
+        return this.$refs.track
       }
     },
     components: {
       PlayItem
-    }
+    },
   }
 
 </script>
@@ -192,7 +259,7 @@
 
   .hr {
     background-color: #212121;
-    height: 1px;
+    height: 6.5px;
     border: 0;
   }
 
@@ -215,17 +282,9 @@
     -ms-user-select: none;
     user-select: none;
   }
-
-  .op {
-    clear: both;
-    color: rgba(0,0,0,0.87);
-    cursor: pointer;
-    min-height: 50px;
-    line-height: 1.5rem;
-    width: 100%;
-    text-align: left;
-    text-transform: none;
-  }
+  .loginAnimation-move{ transition: transform 0.7s; }
+  .zoomOutPushToTop{ position: absolute; }
+  .forgetPassword-move{ transition: transform 0.7s; }
 
 </style>
 

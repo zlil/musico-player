@@ -97,7 +97,7 @@
         return this.$props.bpm
       },
 
-      /* using computed to avoid mutating parent */
+      /* get the leader's bpm using computed to avoid mutating parent */
       getLeaderBpm() {
         if (this.showLeaderBpm)
           return this.$props.leaderBpm
@@ -157,7 +157,7 @@
         this.currentTime = 0
       },
 
-      /* set progress */
+      /* set progress / current time */
       setProgress(progress, keepState = false) {
         if(progress === 0)
           this.setStartPosition()

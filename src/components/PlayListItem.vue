@@ -135,7 +135,10 @@
 
       /* remove track from play list */
       removeFromList() {
+        //if player is playing stop it before remove
+        this.stop()
         this.$emit('removeFromList', this.$props.trackId)
+
       },
 
       /* back to original bpm on click */

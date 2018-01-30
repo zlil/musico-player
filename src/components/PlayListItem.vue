@@ -113,16 +113,16 @@
         this.play(this.playing, loopOrNot);
       },
       stop() {
-        document.getElementsByClassName('player'+this.$props.trackId)[0].pause();
+        this.getPlayer().pause();
         this.setStartPosition()
         this.playing = false
       },
       /* play or pause, set loop if required */
       play(playOrPause, loopOrNot = false) {
         if (playOrPause)
-          document.getElementsByClassName('player'+this.$props.trackId)[0].play();
+          this.getPlayer().play();
         else
-          document.getElementsByClassName('player'+this.$props.trackId)[0].pause();
+          this.getPlayer().pause();
 
         this.loopOrNot = loopOrNot
         this.$refs.player.loop = loopOrNot;
@@ -130,7 +130,12 @@
 
       /* set track volume */
       setVolume() {
-        document.getElementsByClassName('player'+this.$props.trackId)[0].volume = this.volume / 100
+        this.getPlayer().volume = this.volume / 100
+      },
+
+      /* get player */
+      getPlayer() {
+        return document.getElementsByClassName('player'+this.$props.trackId)[0]
       },
 
       /* remove track from play list */
@@ -160,7 +165,7 @@
         let progressDuration = progress  * this.duration
         console.log('track '+this.$props.trackId + ' current time is now: '+ progressDuration)
         this.$refs.player.currentTime = progressDuration
-        let playerAudioTag = document.getElementsByClassName('player'+this.$props.trackId)[0]
+        let playerAudioTag = this.getPlayer()
         //change the play icon
         this.playing = !this.playing
 

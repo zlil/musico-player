@@ -1,6 +1,6 @@
 <template>
   <div class="playItem">
-    <audio :class="[audioClasses]" ref="player" >
+    <audio :class="[audioClasses]" ref="player">
       <source :src="trackSrc" type="audio/wav">
     </audio>
     <div class="row mainRow">
@@ -108,6 +108,7 @@
     methods: {
       /* play or pause the track with loops or not, with loops condition called from parent */
       playOrPause(loopOrNot) {
+
         this.playing = !this.playing
         this.play(this.playing, loopOrNot);
       },

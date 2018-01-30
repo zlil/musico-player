@@ -100,6 +100,12 @@
         //switch stop icon
         this.playingAll = !this.playingAll
         for (let track of this.$refs.track) {
+          //stop all
+          if(!this.playingAll){
+            track.stop()
+            continue
+          }
+
           //if any of the song is playing don't play him again
           if (track.playing && this.playingAll) {
             track.playOrPause()

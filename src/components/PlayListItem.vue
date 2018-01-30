@@ -112,7 +112,11 @@
         this.playing = !this.playing
         this.play(this.playing, loopOrNot);
       },
-
+      stop() {
+        document.getElementsByClassName('player'+this.$props.trackId)[0].pause();
+        this.setStartPosition()
+        this.playing = false
+      },
       /* play or pause, set loop if required */
       play(playOrPause, loopOrNot = false) {
         if (playOrPause)

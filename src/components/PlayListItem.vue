@@ -130,7 +130,7 @@
 
       /* set track volume */
       setVolume() {
-        this.$refs.player.volume = this.volume / 100
+        document.getElementsByClassName('player'+this.$props.trackId)[0].volume = this.volume / 100
       },
 
       /* remove track from play list */

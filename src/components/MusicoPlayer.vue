@@ -224,7 +224,6 @@
 
       /* copy object and add track */
       getTrackToAdd() {
-        debugger
         return {...this.trackToAdd[0]}
       }
     },

@@ -211,6 +211,7 @@
       addTrack() {
         let track = this.getTrackToAdd;
         track.Id = this.tracks.length + 1;
+        track.show = true
         this.tracks.push(track)
       }
     },
@@ -223,6 +224,7 @@
 
       /* copy object and add track */
       getTrackToAdd() {
+        debugger
         return {...this.trackToAdd[0]}
       }
     },
